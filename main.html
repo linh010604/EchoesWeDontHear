@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echoes We Don't Hear Foundation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&display=swap');
+
+:root {
+  --dark: #0a0812;
+  --darker: #06040d;
+  --purple: #7c3aed;
+  --purple-light: #a78bfa;
+  --teal: #00d4aa;
+  --teal-dark: #009e80;
+  --cream: #f5f0ff;
+  --white: #ffffff;
+  --gray: #9ca3af;
+  --text: #e2e0e8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,212,170,0.1) 0%, transparent 70%);
+  bottom: -50px; left: -50px;
+  border-radius: 50%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -30px); }
+}
+
+.hero-eyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.4s;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--teal);
+}
+
+.hero-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  color: var(--purple-light);
+  font-style: italic;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.6s;
+}
+
+.hero-desc {
+  max-width: 600px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--gray);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.8s;
+}
+
+.cta-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 1s;
+}
+
+.btn {
+  padding: 0.9rem 2.2rem;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: var(--dark);
+}
+.btn-primary:hover {
+  background: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,212,170,0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.25);
+}
+.btn-outline:hover {
+  border-color: var(--purple-light);
+  color: var(--purple-light);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 1.2s;
+}
+
+.scroll-indicator span {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--teal), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ── SECTION BASE ── */
+section {
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  line-height: 1.15;
+}
+
+/* ── ABOUT / MISSION ── */
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.mission-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--gray);
+}
+
+.mission-text p + p { margin-top: 1.2rem; }
+
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(0,212,170,0.05));
+  border: 1px solid rgba(124,58,237,0.15);
+  border-radius: 16px;
+  padding: 1.8rem;
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--teal);
+}
+
+.stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--teal);
+  margin-bottom: 0.3rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--gray);
+  line-height: 1.4;
+}
+
+/* ── HOW IT WORKS ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.step {
+  position: relative;
+  padding: 2rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.step:hover {
+  background: rgba(124,58,237,0.06);
+  border-color: var(--purple);
+  transform: translateY(-4px);
+}
+
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: rgba(124,58,237,0.2);
+  margin-bottom: 0.8rem;
+  line-height: 1;
+}
+
+.step h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+}
+
+.step p {
+  font-size: 0.9rem;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* ── INTERACTIVE DEMO ── */
+.demo-section {
+  background: linear-gradient(180deg, var(--darker), var(--dark));
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.demo-section .section-title { margin-bottom: 0.8rem; }
+
+.demo-subtitle {
+  color: var(--gray);
+  margin-bottom: 3rem;
+  font-size: 1rem;
+}
+
+.demo-box {
+  max-width: 650px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--purple), var(--teal));
+}
+
+.demo-question {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--white);
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.demo-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.demo-opt {
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.demo-opt:hover {
+  border-color: var(--purple-light);
+  background: rgba(124,58,237,0.08);
+}
+
+.demo-opt.selected {
+  border-color: var(--teal);
+  background: rgba(0,212,170,0.1);
+  color: var(--white);
+}
+
+.demo-reveal {
+  display: none;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(124,58,237,0.08);
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.demo-reveal.visible { display: block; animation: fadeUp 0.5s ease; }
+
+.demo-reveal h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.demo-reveal p {
+  font-size: 0.9rem;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+.demo-progress {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.progress-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: background 0.3s ease;
+}
+
+.progress-dot.active { background: var(--teal); }
+.progress-dot.done { background: var(--purple); }
+
+.demo-nav {
+  margin-top: 1.5rem;
+}
+
+.demo-nav .btn { font-size: 0.85rem; padding: 0.7rem 1.8rem; }
+
+/* ── CAMPAIGNS SECTION ── */
+.campaigns-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.campaign-card {
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.campaign-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+}
+
+.campaign-card:nth-child(1)::before { background: var(--purple); }
+.campaign-card:nth-child(2)::before { background: var(--teal); }
+.campaign-card:nth-child(3)::before { background: var(--purple-light); }
+.campaign-card:nth-child(4)::before { background: var(--teal-dark); }
+
+.campaign-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+}
+
+.campaign-tag {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.6rem;
+}
+
+.campaign-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--white);
+  margin-bottom: 0.4rem;
+}
+
+.campaign-platform {
+  font-size: 0.8rem;
+  color: var(--purple-light);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.campaign-card p {
+  font-size: 0.85rem;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* ── FOOTER / CTA ── */
+.footer-cta {
+  text-align: center;
+  padding: 6rem 2rem;
+  position: relative;
+}
+
+.footer-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.08) 0%, transparent 70%);
+}
+
+.footer-cta .section-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin-bottom: 1rem;
+}
+
+.footer-cta p {
+  color: var(--gray);
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ── ACTUAL FOOTER ── */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+}
+
+footer a { color: var(--purple-light); text-decoration: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .mission-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .campaigns-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">The Echoes Foundation</div>
+  <h1>Echoes We<br>Don't <em>Hear</em></h1>
+  <p class="hero-sub">Invisible Data, Visible Lives</p>
+  <p class="hero-desc">We expose how algorithms silently construct your identity. Through interactive experiences and digital storytelling, we make the invisible visible — and give you back the power to understand how you're seen.</p>
+  <div class="cta-group">
+    <a href="#demo" class="btn btn-primary">Try the Experience</a>
+    <a href="#mission" class="btn btn-outline">Learn More</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="section-label">Our Mission</div>
+  <div class="section-title">You didn't tell them.<br>They already knew.</div>
+  <div class="mission-grid">
+    <div class="mission-text">
+      <p>Every scroll, pause, and tap leaves a trace. Algorithmic systems don't just collect your data — they <strong style="color:var(--white)">infer</strong> who you are. They classify you as "high engagement," "low attention," or "high risk" without ever asking a single question.</p>
+      <p>The Echoes Foundation exists to make this invisible process visible. We believe you have the right to understand how digital systems see you — and the power to push back.</p>
+      <p>Our campaigns use the same tools that shape perception — social media, video, interactive content — to reveal the machinery behind the curtain.</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">87%</div>
+        <div class="stat-label">of users unaware their behavior is used for inference</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">35%</div>
+        <div class="stat-label">of students lost joy in reading due to analytical framing</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">0</div>
+        <div class="stat-label">questions asked before platforms classify your identity</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">inferences drawn from your digital footprint daily</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="section-label">How It Works</div>
+  <div class="section-title">From passive consumer to active participant</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Experience</h3>
+      <p>Participants engage with what feels like a simple social media quiz. They answer casual questions about preferences and habits — nothing overtly personal.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Reveal</h3>
+      <p>We show participants the surprisingly accurate inferences drawn from their answers — age range, interests, spending habits, even mood patterns — without ever asking directly.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Reflect</h3>
+      <p>The "aha" moment opens a discussion about consent, transparency, and fairness. Participants leave understanding how algorithmic systems construct identity from behavioral signals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE DEMO -->
+<div class="demo-section" id="demo">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label">Try It Yourself</div>
+    <div class="section-title">The Inference Experience</div>
+    <p class="demo-subtitle">Answer 3 simple questions. See what we can infer.</p>
+
+    <div class="demo-box">
+      <div class="demo-progress">
+        <div class="progress-dot active" id="dot0"></div>
+        <div class="progress-dot" id="dot1"></div>
+        <div class="progress-dot" id="dot2"></div>
+      </div>
+
+      <div id="q0" class="demo-q">
+        <div class="demo-question">When do you usually check your phone first thing in the morning?</div>
+        <div class="demo-options">
+          <button class="demo-opt" onclick="selectAnswer(0, this)">Before I get out of bed</button>
+          <button class="demo-opt" onclick="selectAnswer(0, this)">With my coffee / breakfast</button>
+          <button class="demo-opt" onclick="selectAnswer(0, this)">During my commute</button>
+          <button class="demo-opt" onclick="selectAnswer(0, this)">I try to wait at least an hour</button>
+        </div>
+      </div>
+
+      <div id="q1" class="demo-q" style="display:none;">
+        <div class="demo-question">What do you most often scroll through late at night?</div>
+        <div class="demo-options">
+          <button class="demo-opt" onclick="selectAnswer(1, this)">Short videos (TikTok, Reels)</button>
+          <button class="demo-opt" onclick="selectAnswer(1, this)">News or articles</button>
+          <button class="demo-opt" onclick="selectAnswer(1, this)">Shopping / product reviews</button>
+          <button class="demo-opt" onclick="selectAnswer(1, this)">Messaging friends</button>
+        </div>
+      </div>
+
+      <div id="q2" class="demo-q" style="display:none;">
+        <div class="demo-question">Which of these would you most likely share with friends?</div>
+        <div class="demo-options">
+          <button class="demo-opt" onclick="selectAnswer(2, this)">A funny meme or video</button>
+          <button class="demo-opt" onclick="selectAnswer(2, this)">An interesting article or thread</button>
+          <button class="demo-opt" onclick="selectAnswer(2, this)">A product or deal I found</button>
+          <button class="demo-opt" onclick="selectAnswer(2, this)">A personal photo or story</button>
+        </div>
+      </div>
+
+      <div id="reveal" class="demo-reveal">
+        <h4>Here's what a platform could infer about you:</h4>
+        <p id="reveal-text"></p>
+        <p style="margin-top: 1rem; color: var(--teal); font-weight: 500; font-size: 0.85rem;">We never asked your age, income, or interests directly. But your behavior told us everything. This is happening every time you're online.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CAMPAIGNS WE'RE INSPIRED BY -->
+<section>
+  <div class="section-label">Inspired By</div>
+  <div class="section-title">Campaigns that changed the game</div>
+  <div class="campaigns-grid">
+    <div class="campaign-card">
+      <div class="campaign-tag">Emotional Storytelling</div>
+      <h3>Kony 2012</h3>
+      <div class="campaign-platform">YouTube • Invisible Children</div>
+      <p>Proved a single emotionally-driven media piece could transform an invisible global issue into mainstream conversation — reaching 100M views in six days.</p>
+    </div>
+    <div class="campaign-card">
+      <div class="campaign-tag">Testimonial Trust</div>
+      <h3>St. Jude Children's Hospital</h3>
+      <div class="campaign-platform">YouTube / TikTok</div>
+      <p>Uses real patient stories to build emotional connection and drive action. Personal narrative makes the abstract feel intimate and urgent.</p>
+    </div>
+    <div class="campaign-card">
+      <div class="campaign-tag">Participatory Action</div>
+      <h3>ALS Ice Bucket Challenge</h3>
+      <div class="campaign-platform">Instagram / YouTube</div>
+      <p>Raised $115M by turning a cause into a social event. People didn't just watch — they participated, filmed, and nominated friends.</p>
+    </div>
+    <div class="campaign-card">
+      <div class="campaign-tag">Simple & Shareable</div>
+      <h3>Pass It On</h3>
+      <div class="campaign-platform">Billboards / Video • Foundation for a Better Life</div>
+      <p>Distills complex values into simple, repeatable moments. Proves you don't need complexity to make a lasting impression.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta">
+  <div class="section-label">Take Action</div>
+  <div class="section-title">Your data tells a story.<br>Shouldn't you be the author?</div>
+  <p>Join the movement to make algorithmic inference transparent. Share the experience. Start the conversation.</p>
+  <div class="cta-group">
+    <a href="#demo" class="btn btn-primary">#EchoesWeDontHear</a>
+    <a href="#mission" class="btn btn-outline">Learn More</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Echoes We Don't Hear Foundation &mdash; A media awareness campaign<br>
+  Created by Olivia Rudnick, Jack McGee, Alexander Muchnik, Samir Rafique &amp; Linh Nguyen</p>
+</footer>
+
+<script>
+const answers = [];
+const inferences = [
+  [
+    "High screen dependency, likely 18-24 age range. Classified as 'always-on' user — ideal for push notification targeting and morning ad placement.",
+    "Moderate digital habits, likely values routine. Classified as 'ritualistic user' — responsive to scheduled content and newsletter-style engagement.",
+    "Structured schedule, possibly a commuter or student. Classified as 'transit-engaged' — prime target for audio ads and short-form content.",
+    "Intentional tech user, likely values mental health. Classified as 'low-frequency high-value' — harder to reach but higher conversion when engaged."
+  ],
+  [
+    "Entertainment-driven, short attention span profile. Algorithm will serve increasingly sensational content to maximize watch time.",
+    "Information seeker, higher education probability. Algorithm will prioritize news and opinion content — creating a filter bubble around your political leanings.",
+    "Consumer-intent signals detected. Your feed will shift toward product placement and sponsored content. You'll see 'reviews' that are paid ads.",
+    "Social connector profile. Platforms will prioritize showing you content your friends engage with — even if it's not what you'd choose yourself."
+  ],
+  [
+    "Humor-driven sharing pattern. Platforms infer you're an 'amplifier' — they'll use your shares to test what goes viral. You're part of the content supply chain.",
+    "Intellectual sharer. Platforms classify you as an 'opinion leader' — your engagement signals will be weighted more heavily in recommendation algorithms.",
+    "Deal-sharer profile. Platforms infer purchase intent and will increase product ads across all your feeds — not just shopping apps.",
+    "Personal sharer. Platforms infer strong social bonds and will show you more emotionally charged content, knowing you'll engage and share with close contacts."
+  ]
+];
+
+let currentQ = 0;
+
+function selectAnswer(qIndex, btn) {
+  // Mark selected
+  btn.parentElement.querySelectorAll('.demo-opt').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  const optIndex = Array.from(btn.parentElement.children).indexOf(btn);
+  answers[qIndex] = optIndex;
+
+  setTimeout(() => {
+    if (currentQ < 2) {
+      document.getElementById('q' + currentQ).style.display = 'none';
+      currentQ++;
+      document.getElementById('q' + currentQ).style.display = 'block';
+      document.getElementById('dot' + currentQ).classList.add('active');
+      document.getElementById('dot' + (currentQ - 1)).classList.remove('active');
+      document.getElementById('dot' + (currentQ - 1)).classList.add('done');
+    } else {
+      // Show reveal
+      document.getElementById('dot2').classList.remove('active');
+      document.getElementById('dot2').classList.add('done');
+      document.getElementById('q2').style.display = 'none';
+
+      let revealHTML = '';
+      answers.forEach((a, i) => {
+        revealHTML += '<strong style="color:var(--white)">Inference ' + (i+1) + ':</strong> ' + inferences[i][a] + '<br><br>';
+      });
+
+      document.getElementById('reveal-text').innerHTML = revealHTML;
+      document.getElementById('reveal').classList.add('visible');
+    }
+  }, 400);
+}
+</script>
+
+</body>
+</html>
